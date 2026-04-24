@@ -1,2 +1,6 @@
 data/
-outputs/
+__pycache__/
+*.pth
+*.pt
+.ipynb_checkpoints/
+.DS_Store
