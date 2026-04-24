@@ -2,6 +2,16 @@
 
 # Brain MRI Tumor Segmentation with U-Net
 
+## Repository Structure
+
+```text
+.
+├── train.py          # Training script
+├── model.py          # U-Net model architecture
+├── dataset.py        # Dataset and preprocessing
+├── utils.py          # Metrics and helper functions
+├── outputs/          # Prediction examples and experiment outputs
+└── README.md
 
 
 ## 1. Project Overview
@@ -81,6 +91,7 @@ Medical image segmentation is a key task in healthcare AI, especially for tumor 
 ## 6. Prediction Examples
 
 ![prediction](outputs/predictions/prediction_0.png)
+![result](https://github.com/Leean-Jo/brain-mri-tumor-segmentation-unet/blob/main/outputs/predictions/prediction_0.png)
 
 ---
 

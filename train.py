@@ -60,7 +60,7 @@ def validate(model, loader, criterion, device):
 def main():
     data_root = "data/lgg-mri-segmentation"
 
-    lr = 1e-3
+    lr = 1e-3ne
     batch_size = 8
     num_epochs = 1
     image_size = (128, 128)
