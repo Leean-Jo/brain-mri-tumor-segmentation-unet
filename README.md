@@ -1,118 +1,111 @@
-
-
 # Brain MRI Tumor Segmentation with U-Net
 
-## Repository Structure
+## 1. Project Overview
+
+This project aims to segment brain tumor regions from MRI images using a U-Net based deep learning model.
+
+Medical image segmentation is an important task in healthcare AI because it can support diagnosis, treatment planning, and tumor progression monitoring.
+
+The main goal of this project was to build a complete medical image segmentation pipeline and improve it from a simple baseline experiment to a more reliable validation-based training setup.
+
+---
+
+## 2. Repository Structure
 
 ```text
 .
-├── train.py          # Training script
-├── model.py          # U-Net model architecture
-├── dataset.py        # Dataset and preprocessing
-├── utils.py          # Metrics and helper functions
-├── outputs/          # Prediction examples and experiment outputs
+├── train.py              # Training script
+├── predict.py            # Prediction visualization script
+├── src/
+│   ├── dataset.py        # Dataset loading and preprocessing
+│   ├── model.py          # U-Net model architecture
+│   ├── losses.py         # BCE + Dice Loss
+│   └── metrics.py        # Dice and IoU metrics
+├── outputs/
+│   └── epoch5/
+│       ├── checkpoints/  # Best model checkpoint
+│       └── predictions/  # Prediction examples
 └── README.md
 
 
-## 1. Project Overview
+3. Dataset
+Dataset: LGG MRI Segmentation Dataset
+Total samples: 3,929
+Input: Brain MRI image
+Target: Binary tumor mask
+Task: Binary semantic segmentation
+Dataset Characteristics
 
-## 2. Dataset
-
-## 3. Method
-
-## 4. Training
-
-## 5. Results
-
-## 6. Limitations
-
-## 7. Future Work
+This dataset has a class imbalance problem because tumor regions usually occupy a much smaller area than the background.
+For this reason, Dice-based evaluation is important in addition to pixel-wise loss.
 
 
+4. Method
+Model: U-Net
+
+U-Net was used because it is widely adopted for biomedical image segmentation.
+
+The model uses an encoder-decoder structure:
+
+Encoder extracts high-level image features
+Decoder restores spatial resolution
+Skip connections help preserve fine-grained spatial information
+
+Skip connections are especially important in segmentation because tumor boundaries can be small and detailed.
 
 
 
-# Brain MRI Tumor Segmentation with U-Net
+5. Loss Function
 
-## 1. Project Overview
-This project aims to segment tumor regions from Brain MRI images using a U-Net based deep learning model.
+The model was trained using BCE + Dice Loss.
 
-Medical image segmentation is a key task in healthcare AI, especially for tumor detection and treatment planning.
+BCE Loss provides pixel-wise supervision
+Dice Loss directly optimizes overlap between the predicted mask and ground truth mask
+Dice Loss helps reduce the effect of class imbalance
 
----
+This combination is useful for medical segmentation tasks where the target region is relatively small.
 
-## 2. Dataset
-- LGG MRI Segmentation Dataset (Kaggle)
-- Total samples: 3929
-- Input: Brain MRI image
-- Target: Binary tumor mask
 
----
+6. Metrics
 
-## 3. Method
+The model was evaluated using:
 
-### Model
-- U-Net architecture
-- Encoder-Decoder structure with skip connections
+Dice Score
+IoU Score
 
-### Loss
-- BCE + Dice Loss
+Dice Score measures the overlap between the predicted mask and the ground truth mask.
+IoU is a stricter overlap-based metric.
 
-### Metrics
-- Dice Score
-- IoU Score
 
-### Preprocessing
-- Resize: 128x128
-- Normalization: [0, 1]
-- Augmentation: Horizontal / Vertical flip
 
----
+7. Preprocessing and Training
+Preprocessing
+Resize: 128 × 128
+Normalization: [0, 1]
+Augmentation: Horizontal / Vertical flip for training data
+Training Setup
+Epochs: 5
+Batch size: 8
+Optimizer: Adam
+Learning rate: 1e-3
+Device: CPU
+Train / Validation split: 80 / 20
+Best model saved based on validation Dice Score
 
-## 4. Training
 
-- Epochs: 1 (baseline)
-- Batch size: 8
-- Optimizer: Adam
-- Learning rate: 1e-3
-- Device: CPU
 
----
 
-## 5. Results
+8. Results
+Training Log
+Epoch	Train Loss	Val Loss	Val Dice	Val IoU
+1	0.9386	0.9188	0.4896	0.4541
+2	0.8396	0.8607	0.6232	0.5914
+3	0.8131	0.8211	0.4892	0.4507
+4	0.8009	0.8238	0.4489	0.4127
+5	0.7885	0.7896	0.6387	0.6010
+Best Validation Performance
+Metric	Score
+Dice	0.6387
+IoU	0.6010
 
-| Metric | Score |
-|------|------|
-| Dice | 0.4383 |
-| IoU  | 0.4033 |
-
----
-
-## 6. Prediction Examples
-
-![prediction](outputs/predictions/prediction_0.png)
-![result](https://github.com/Leean-Jo/brain-mri-tumor-segmentation-unet/blob/main/outputs/predictions/prediction_0.png)
-
----
-
-## 7. Key Learnings
-
-- Implemented full medical image segmentation pipeline
-- Understood class imbalance in segmentation tasks
-- Compared Dice vs BCE loss behavior
-
----
-
-## 8. Limitations
-
-- Low resolution (128x128)
-- Trained on CPU (limited epochs)
-- 2D segmentation only
-
----
-
-## 9. Future Work
-
-- Train with higher resolution (256x256)
-- Use GPU for longer training
-- Try advanced architectures (UNet++, Attention U-Net)
+The best model was saved at epoch 5 based on validation Dice Score.
