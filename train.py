@@ -11,8 +11,6 @@ from src.metrics import dice_score, iou_score
 from src.model import UNet
 
 
-
-
 def train_one_epoch(model, loader, criterion, optimizer, device):
     model.train()
     running_loss = 0.0
@@ -22,8 +20,10 @@ def train_one_epoch(model, loader, criterion, optimizer, device):
         masks = batch["mask"].to(device)
 
         optimizer.zero_grad()
+
         outputs = model(images)
         loss = criterion(outputs, masks)
+
         loss.backward()
         optimizer.step()
 
@@ -60,9 +60,9 @@ def validate(model, loader, criterion, device):
 def main():
     data_root = "data/lgg-mri-segmentation"
 
-    lr = 1e-3ne
+    lr = 1e-3
     batch_size = 8
-    num_epochs = 1
+    num_epochs = 5
     image_size = (128, 128)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -92,21 +92,44 @@ def main():
         augment=False,
     )
 
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=0)
-    val_loader = DataLoader(val_dataset, batch_size=batch_size, shuffle=False, num_workers=0)
+    train_loader = DataLoader(
+        train_dataset,
+        batch_size=batch_size,
+        shuffle=True,
+        num_workers=0,
+    )
+
+    val_loader = DataLoader(
+        val_dataset,
+        batch_size=batch_size,
+        shuffle=False,
+        num_workers=0,
+    )
 
     model = UNet(in_channels=3, out_channels=1).to(device)
     criterion = BCEDiceLoss()
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
 
-    save_dir = Path("outputs/checkpoints")
+    save_dir = Path("outputs/epoch5/checkpoints")
     save_dir.mkdir(parents=True, exist_ok=True)
 
     best_dice = 0.0
 
     for epoch in range(num_epochs):
-        train_loss = train_one_epoch(model, train_loader, criterion, optimizer, device)
-        val_loss, val_dice, val_iou = validate(model, val_loader, criterion, device)
+        train_loss = train_one_epoch(
+            model,
+            train_loader,
+            criterion,
+            optimizer,
+            device,
+        )
+
+        val_loss, val_dice, val_iou = validate(
+            model,
+            val_loader,
+            criterion,
+            device,
+        )
 
         print(
             f"Epoch [{epoch + 1}/{num_epochs}] "
@@ -118,7 +141,10 @@ def main():
 
         if val_dice > best_dice:
             best_dice = val_dice
-            torch.save(model.state_dict(), save_dir / "best_model.pth")
+            torch.save(
+                model.state_dict(),
+                save_dir / "best_model.pth",
+            )
             print(f"Best model saved. Dice={best_dice:.4f}")
 
 

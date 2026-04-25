@@ -22,9 +22,10 @@ The main goal of this project was to build a complete medical image segmentation
 │   ├── losses.py         # BCE + Dice Loss
 │   └── metrics.py        # Dice and IoU metrics
 ├── outputs/
+│   ├── baseline/
+│   │   └── predictions/  # 1-epoch baseline prediction examples
 │   └── epoch5/
-│       ├── checkpoints/  # Best model checkpoint
-│       └── predictions/  # Prediction examples
+│       └── predictions/  # 5-epoch prediction examples
 └── README.md
 
 
@@ -95,17 +96,63 @@ Best model saved based on validation Dice Score
 
 
 
-8. Results
-Training Log
+
+## 8. Results
+
+### Experiment Comparison
+
+| Experiment | Epochs | Val Dice | Val IoU |
+|---|---:|---:|---:|
+| Baseline | 1 | 0.4383 | 0.4033 |
+| Improved Training | 5 | 0.6387 | 0.6010 |
+
+
+### Training Log
 Epoch	Train Loss	Val Loss	Val Dice	Val IoU
 1	0.9386	0.9188	0.4896	0.4541
 2	0.8396	0.8607	0.6232	0.5914
 3	0.8131	0.8211	0.4892	0.4507
 4	0.8009	0.8238	0.4489	0.4127
 5	0.7885	0.7896	0.6387	0.6010
-Best Validation Performance
+
+
+### Best Validation Performance
 Metric	Score
 Dice	0.6387
 IoU	0.6010
 
 The best model was saved at epoch 5 based on validation Dice Score.
+
+
+
+## 9. Prediction Examples
+
+### Baseline: 1 Epoch
+
+![Baseline Prediction](outputs/baseline/predictions/prediction_0.png)
+
+### Improved Training: 5 Epochs
+
+![Epoch 5 Prediction](outputs/epoch5/predictions/pred_0.png)
+
+
+
+10. Key Learnings
+Implemented a full medical image segmentation pipeline
+Trained and evaluated a U-Net model using validation metrics
+Understood the impact of class imbalance in segmentation tasks
+Compared the roles of BCE Loss and Dice Loss
+Saved the best model based on validation Dice instead of using the final model blindly
+11. Limitations
+Training was limited to 5 epochs due to CPU-only environment
+Input resolution was reduced to 128 × 128, which may lose fine tumor boundary details
+The model was trained on 2D MRI slices instead of full 3D volumes
+Class imbalance was handled through Dice Loss, but not through weighted sampling or focal loss
+12. Future Work
+Train for more epochs using GPU
+Increase input resolution to 256 × 256
+Try advanced architectures such as UNet++ or Attention U-Net
+Apply stronger class imbalance handling such as Focal Loss or Weighted BCE
+Add learning curve visualization for train and validation metrics
+
+
