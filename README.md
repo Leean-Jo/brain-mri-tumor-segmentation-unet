@@ -133,6 +133,14 @@ The best model was saved at epoch 5 based on validation Dice Score.
 
 ![Epoch 5 Prediction](outputs/epoch5/predictions/pred_0.png)
 
+The selected example contains a very small or no tumor region, which makes the prediction visually sparse.
+
+This reflects the class imbalance in the dataset, where most pixels belong to the background.
+
+Despite the simple training setup, the model shows reasonable behavior by predicting minimal tumor regions.
+
+Additional examples with visible tumor regions can further demonstrate the model's segmentation capability.
+
 
 
 ## 10. Key Learnings
@@ -141,12 +149,16 @@ Trained and evaluated a U-Net model using validation metrics
 Understood the impact of class imbalance in segmentation tasks
 Compared the roles of BCE Loss and Dice Loss
 Saved the best model based on validation Dice instead of using the final model blindly
-11. Limitations
+
+
+## 11. Limitations
 Training was limited to 5 epochs due to CPU-only environment
 Input resolution was reduced to 128 × 128, which may lose fine tumor boundary details
 The model was trained on 2D MRI slices instead of full 3D volumes
 Class imbalance was handled through Dice Loss, but not through weighted sampling or focal loss
-12. Future Work
+
+
+## 12. Future Work
 Train for more epochs using GPU
 Increase input resolution to 256 × 256
 Try advanced architectures such as UNet++ or Attention U-Net
