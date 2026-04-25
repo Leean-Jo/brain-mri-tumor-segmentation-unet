@@ -27,9 +27,10 @@ The main goal of this project was to build a complete medical image segmentation
 │   └── epoch5/
 │       └── predictions/  # 5-epoch prediction examples
 └── README.md
+```
 
+## 3. Dataset
 
-3. Dataset
 Dataset: LGG MRI Segmentation Dataset
 Total samples: 3,929
 Input: Brain MRI image
@@ -41,7 +42,7 @@ This dataset has a class imbalance problem because tumor regions usually occupy 
 For this reason, Dice-based evaluation is important in addition to pixel-wise loss.
 
 
-4. Method
+## 4. Method
 Model: U-Net
 
 U-Net was used because it is widely adopted for biomedical image segmentation.
@@ -56,7 +57,7 @@ Skip connections are especially important in segmentation because tumor boundari
 
 
 
-5. Loss Function
+## 5. Loss Function
 
 The model was trained using BCE + Dice Loss.
 
@@ -67,7 +68,7 @@ Dice Loss helps reduce the effect of class imbalance
 This combination is useful for medical segmentation tasks where the target region is relatively small.
 
 
-6. Metrics
+## 6. Metrics
 
 The model was evaluated using:
 
@@ -79,7 +80,7 @@ IoU is a stricter overlap-based metric.
 
 
 
-7. Preprocessing and Training
+## 7. Preprocessing and Training
 Preprocessing
 Resize: 128 × 128
 Normalization: [0, 1]
@@ -127,9 +128,6 @@ The best model was saved at epoch 5 based on validation Dice Score.
 
 ## 9. Prediction Examples
 
-### Baseline: 1 Epoch
-
-![Baseline Prediction](outputs/baseline/predictions/prediction_0.png)
 
 ### Improved Training: 5 Epochs
 
@@ -137,7 +135,7 @@ The best model was saved at epoch 5 based on validation Dice Score.
 
 
 
-10. Key Learnings
+## 10. Key Learnings
 Implemented a full medical image segmentation pipeline
 Trained and evaluated a U-Net model using validation metrics
 Understood the impact of class imbalance in segmentation tasks
